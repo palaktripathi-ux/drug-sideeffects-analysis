@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load data
-df = pd.read_csv("data/raw/drugs_side_effects.csv")
+df = pd.read_csv("drugs_side_effects.csv")
 
 # App title
 st.title("💊 Drug, Side Effects & Medical Condition Dashboard")
