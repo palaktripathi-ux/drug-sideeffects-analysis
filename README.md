@@ -18,40 +18,6 @@ and a content-based recommender system.
 | Dashboard | `dashboard/dashboard.html` | Standalone, self-contained analytics dashboard (open directly in any browser, no server needed) |
 | Report | `report/Project_Report.docx` | Full written report: methodology, results, limitations, future work |
 
-## Setup
-
-```bash
-pip install -r requirements.txt
-```
-
-## Run the pipeline (in order — each step depends on the last)
-
-```bash
-cd src
-python clean_data.py        # -> data/drugs_clean.pkl, data/drugs_clean.csv
-python eda_insights.py       # -> dashboard/insights.json, outputs/*.png
-python nlp_clustering.py     # -> data/drugs_with_clusters.pkl, dashboard/cluster_summary.json
-python ml_models.py          # -> models/*.pkl, outputs/ml_results.json
-python recommender.py        # -> models/recommender_artifacts.pkl
-```
-
-All pickled artifacts are already included in this package, so you can skip straight to
-running the app if you don't want to retrain anything.
-
-## Run the Streamlit app
-
-```bash
-streamlit run app/Home.py
-```
-
-Navigate between pages using the sidebar: Home, Drug Explorer, Insights Dashboard,
-Side-Effect Clusters, ML Predictions, Drug Recommender.
-
-## View the standalone dashboard
-
-Just open `dashboard/dashboard.html` in any web browser — all data is embedded, no
-server or internet connection required (except to load the Chart.js and font CDN links
-for styling).
 
 ## Key results at a glance
 
@@ -64,12 +30,6 @@ for styling).
 - Rating-band classifier: **56.7% accuracy** (4-class problem)
 - Drug-class-from-text classifier: **81.2% accuracy** (47-class problem)
 - Recommender validated against known equivalents (e.g. ibuprofen → Advil at 99.8% similarity)
-
-## Presenting this project
-
-- Use `report/Project_Report.docx` as your written submission / documentation.
-- Use `dashboard/dashboard.html` as a quick visual to open during your viva/defense.
-- Use the Streamlit app for a live, interactive demo.
 
 ## Disclaimer
 
