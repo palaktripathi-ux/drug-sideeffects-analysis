@@ -1,0 +1,35 @@
+{
+  "rating_band_model": {
+    "accuracy": 0.567,
+    "macro_precision": 0.538,
+    "macro_recall": 0.558,
+    "macro_f1": 0.542,
+    "top_features": {
+      "no_of_reviews": 0.291,
+      "primary_drug_class": 0.248,
+      "medical_condition": 0.15,
+      "side_effect_count": 0.106,
+      "pregnancy_category": 0.07,
+      "brand_count": 0.061,
+      "rx_otc": 0.036,
+      "csa": 0.021
+    },
+    "n_train": 1256,
+    "n_test": 314,
+    "classes": [
+      "Average (3-6)",
+      "Excellent (8-10)",
+      "Good (6-8)",
+      "Poor (0-3)"
+    ]
+  },
+  "drug_class_text_model": {
+    "accuracy": 0.812,
+    "macro_precision": 0.832,
+    "macro_recall": 0.843,
+    "macro_f1": 0.82,
+    "n_classes": 47,
+    "n_train": 1469,
+    "n_test": 368
+  }
+}
