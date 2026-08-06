@@ -1,0 +1,356 @@
+{
+  "overview": {
+    "total_drugs": 2912,
+    "total_records": 2931,
+    "total_conditions": 47,
+    "total_drug_classes": 230,
+    "avg_rating": 6.83,
+    "avg_reviews": 75.4,
+    "pct_prescription": 88.7
+  },
+  "top_conditions": {
+    "Pain": 264,
+    "Colds & Flu": 245,
+    "Acne": 238,
+    "Hypertension": 177,
+    "Osteoarthritis": 129,
+    "Hayfever": 124,
+    "Eczema": 122,
+    "AIDS/HIV": 109,
+    "Diabetes (Type 2)": 104,
+    "Psoriasis": 93
+  },
+  "top_drug_classes": {
+    "Upper respiratory combinations": 245,
+    "Topical acne agents": 125,
+    "Topical steroids": 94,
+    "Unclassified": 83,
+    "Nonsteroidal anti-inflammatory drugs": 72,
+    "Antihistamines": 61,
+    "Miscellaneous topical agents": 56,
+    "Topical rubefacient": 56,
+    "Topical anesthetics": 54,
+    "Laxatives": 53
+  },
+  "rx_otc_breakdown": {
+    "Rx": 1997,
+    "Rx/OTC": 604,
+    "OTC": 328,
+    "Unknown": 2
+  },
+  "pregnancy_category_breakdown": {
+    "C": 1382,
+    "B": 508,
+    "N": 436,
+    "Unknown": 230,
+    "D": 228,
+    "X": 129,
+    "A": 18
+  },
+  "rating_band_breakdown": {
+    "No rating": 1361,
+    "Excellent (8-10)": 570,
+    "Good (6-8)": 514,
+    "Average (3-6)": 382,
+    "Poor (0-3)": 104
+  },
+  "top_side_effects": {
+    "lips": 2273,
+    "tongue": 2129,
+    "hives": 1940,
+    "swelling of your face": 1713,
+    "difficult breathing": 1257,
+    "nausea": 1183,
+    "vomiting": 1182,
+    "itching": 1142,
+    "dizziness": 807,
+    "diarrhea": 806,
+    "confusion": 705,
+    "constipation": 693,
+    "fever": 636,
+    "headache": 623,
+    "loss of appetite": 605
+  },
+  "top_rated_drugs": [
+    {
+      "drug_name": "demerol",
+      "medical_condition": "Pain",
+      "rating": 9.6,
+      "no_of_reviews": 70
+    },
+    {
+      "drug_name": "opium",
+      "medical_condition": "Diarrhea",
+      "rating": 9.6,
+      "no_of_reviews": 28
+    },
+    {
+      "drug_name": "stribild",
+      "medical_condition": "AIDS/HIV",
+      "rating": 9.5,
+      "no_of_reviews": 89
+    },
+    {
+      "drug_name": "cobicistat / elvitegravir / emtricitabine / tenofovir",
+      "medical_condition": "AIDS/HIV",
+      "rating": 9.5,
+      "no_of_reviews": 89
+    },
+    {
+      "drug_name": "meperidine",
+      "medical_condition": "Pain",
+      "rating": 9.5,
+      "no_of_reviews": 93
+    },
+    {
+      "drug_name": "desoxyn",
+      "medical_condition": "ADHD",
+      "rating": 9.4,
+      "no_of_reviews": 35
+    },
+    {
+      "drug_name": "nefazodone",
+      "medical_condition": "Anxiety",
+      "rating": 9.3,
+      "no_of_reviews": 39
+    },
+    {
+      "drug_name": "aciphex",
+      "medical_condition": "GERD (Heartburn)",
+      "rating": 9.3,
+      "no_of_reviews": 36
+    },
+    {
+      "drug_name": "tramadol",
+      "medical_condition": "Anxiety",
+      "rating": 9.3,
+      "no_of_reviews": 106
+    },
+    {
+      "drug_name": "ephedrine / guaifenesin",
+      "medical_condition": "Colds & Flu",
+      "rating": 9.2,
+      "no_of_reviews": 21
+    }
+  ],
+  "lowest_rated_drugs": [
+    {
+      "drug_name": "euthyrox",
+      "medical_condition": "Hypothyroidism",
+      "rating": 1.1,
+      "no_of_reviews": 92
+    },
+    {
+      "drug_name": "basaglar",
+      "medical_condition": "Diabetes (Type 1)",
+      "rating": 1.8,
+      "no_of_reviews": 58
+    },
+    {
+      "drug_name": "prochlorperazine",
+      "medical_condition": "Anxiety",
+      "rating": 2.1,
+      "no_of_reviews": 84
+    },
+    {
+      "drug_name": "fosamax",
+      "medical_condition": "Osteoporosis",
+      "rating": 2.4,
+      "no_of_reviews": 55
+    },
+    {
+      "drug_name": "alendronate",
+      "medical_condition": "Osteoporosis",
+      "rating": 2.5,
+      "no_of_reviews": 106
+    },
+    {
+      "drug_name": "hydralazine",
+      "medical_condition": "Hypertension",
+      "rating": 2.7,
+      "no_of_reviews": 77
+    },
+    {
+      "drug_name": "prolia",
+      "medical_condition": "Osteoporosis",
+      "rating": 2.7,
+      "no_of_reviews": 332
+    },
+    {
+      "drug_name": "denosumab",
+      "medical_condition": "Osteoporosis",
+      "rating": 2.7,
+      "no_of_reviews": 337
+    },
+    {
+      "drug_name": "umeclidinium",
+      "medical_condition": "COPD",
+      "rating": 2.8,
+      "no_of_reviews": 21
+    },
+    {
+      "drug_name": "risedronate",
+      "medical_condition": "Osteoporosis",
+      "rating": 2.9,
+      "no_of_reviews": 56
+    }
+  ],
+  "most_side_effects_drugs": [
+    {
+      "drug_name": "zopiclone",
+      "medical_condition": "Insomnia",
+      "side_effect_count": 444
+    },
+    {
+      "drug_name": "salbutamol",
+      "medical_condition": "Asthma",
+      "side_effect_count": 441
+    },
+    {
+      "drug_name": "bamlanivimab and etesevimab",
+      "medical_condition": "Covid 19",
+      "side_effect_count": 433
+    },
+    {
+      "drug_name": "coal tar/salicylic acid",
+      "medical_condition": "Psoriasis",
+      "side_effect_count": 418
+    },
+    {
+      "drug_name": "tzield",
+      "medical_condition": "Diabetes (Type 1)",
+      "side_effect_count": 402
+    },
+    {
+      "drug_name": "infliximab",
+      "medical_condition": "IBD (Bowel)",
+      "side_effect_count": 337
+    },
+    {
+      "drug_name": "alemtuzumab",
+      "medical_condition": "Rheumatoid Arthritis",
+      "side_effect_count": 139
+    },
+    {
+      "drug_name": "avelox i.v.",
+      "medical_condition": "Bronchitis",
+      "side_effect_count": 103
+    },
+    {
+      "drug_name": "anaprox",
+      "medical_condition": "Osteoarthritis",
+      "side_effect_count": 91
+    },
+    {
+      "drug_name": "anaprox-ds",
+      "medical_condition": "Osteoarthritis",
+      "side_effect_count": 91
+    }
+  ],
+  "best_treated_conditions": [
+    {
+      "medical_condition": "Swine Flu",
+      "avg_rating": 8.65,
+      "drug_count": 5
+    },
+    {
+      "medical_condition": "Gout",
+      "avg_rating": 8.525,
+      "drug_count": 9
+    },
+    {
+      "medical_condition": "Eczema",
+      "avg_rating": 8.269444444444444,
+      "drug_count": 121
+    },
+    {
+      "medical_condition": "Pneumonia",
+      "avg_rating": 8.027272727272727,
+      "drug_count": 72
+    },
+    {
+      "medical_condition": "Stroke",
+      "avg_rating": 7.866666666666667,
+      "drug_count": 5
+    },
+    {
+      "medical_condition": "Angina",
+      "avg_rating": 7.830000000000001,
+      "drug_count": 71
+    },
+    {
+      "medical_condition": "Anxiety",
+      "avg_rating": 7.795454545454547,
+      "drug_count": 45
+    },
+    {
+      "medical_condition": "Migraine",
+      "avg_rating": 7.694117647058823,
+      "drug_count": 61
+    },
+    {
+      "medical_condition": "Herpes",
+      "avg_rating": 7.69,
+      "drug_count": 9
+    },
+    {
+      "medical_condition": "Weight Loss",
+      "avg_rating": 7.566666666666666,
+      "drug_count": 23
+    }
+  ],
+  "worst_treated_conditions": [
+    {
+      "medical_condition": "Hypertension",
+      "avg_rating": 5.983333333333334,
+      "drug_count": 177
+    },
+    {
+      "medical_condition": "Cholesterol",
+      "avg_rating": 5.866666666666666,
+      "drug_count": 45
+    },
+    {
+      "medical_condition": "Diabetes (Type 2)",
+      "avg_rating": 5.733720930232559,
+      "drug_count": 104
+    },
+    {
+      "medical_condition": "Incontinence",
+      "avg_rating": 5.7,
+      "drug_count": 19
+    },
+    {
+      "medical_condition": "Hypothyroidism",
+      "avg_rating": 5.5249999999999995,
+      "drug_count": 17
+    },
+    {
+      "medical_condition": "Cancer",
+      "avg_rating": 5.5,
+      "drug_count": 20
+    },
+    {
+      "medical_condition": "Bronchitis",
+      "avg_rating": 5.488235294117647,
+      "drug_count": 71
+    },
+    {
+      "medical_condition": "Hair Loss",
+      "avg_rating": 5.283333333333333,
+      "drug_count": 11
+    },
+    {
+      "medical_condition": "Allergies",
+      "avg_rating": 5.233333333333333,
+      "drug_count": 14
+    },
+    {
+      "medical_condition": "Osteoporosis",
+      "avg_rating": 4.925,
+      "drug_count": 56
+    }
+  ],
+  "correlation_sideeffects_rating": 0.046,
+  "alcohol_interaction_pct": 47.0
+}

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Drug Safety &amp; Efficacy Analytics — Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.3/chart.umd.min.js"></script>
+<style>
+  :root{
+    --paper:#F7F5EF;
+    --paper-card:#FFFFFF;
+    --ink:#1C2B33;
+    --ink-soft:#5B6B73;
+    --line:#DDD8CB;
+    --teal:#0F766E;
+    --teal-soft:#CFE8E5;
+    --amber:#B45309;
+    --amber-soft:#F3E1C8;
+    --red:#9F1D35;
+    --red-soft:#F3D8DC;
+    --blue:#3B5B8C;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    padding-bottom:60px;
+  }
+  .label-header{
+    max-width:1200px;
+    margin:0 auto;
+    padding:28px 24px 18px;
+    border-bottom:2px dashed var(--line);
+  }
+  .rx-mark{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:2px;
+    color:var(--teal);
+    text-transform:uppercase;
+  }
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:clamp(28px, 4vw, 42px);
+    margin:6px 0 4px;
+    font-weight:700;
+    letter-spacing:-0.5px;
+  }
+  .subhead{
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:680px;
+  }
+  .meta-strip{
+    display:flex;
+    gap:24px;
+    flex-wrap:wrap;
+    margin-top:14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .meta-strip span b{ color:var(--ink); }
+
+  .container{ max-width:1200px; margin:0 auto; padding:0 24px; }
+
+  .kpi-row{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(160px,1fr));
+    gap:14px;
+    margin:26px 0;
+  }
+  .kpi{
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:16px 18px;
+    position:relative;
+  }
+  .kpi::before{
+    content:"";
+    position:absolute; left:0; top:0; bottom:0; width:3px;
+    background:var(--teal);
+  }
+  .kpi .val{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:26px;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .kpi .lbl{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:var(--ink-soft);
+    margin-top:4px;
+  }
+
+  .section-title{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:20px;
+    font-weight:600;
+    margin:36px 0 14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .section-title .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    background:var(--teal);
+    color:white;
+    padding:3px 8px;
+    border-radius:3px;
+    letter-spacing:1px;
+  }
+
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media (max-width:860px){ .grid-2, .grid-3{ grid-template-columns:1fr; } }
+
+  .card{
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:18px;
+  }
+  .card h3{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:14px;
+    font-weight:600;
+    margin:0 0 12px;
+    color:var(--ink);
+  }
+  .card .cap{
+    font-size:11.5px;
+    color:var(--ink-soft);
+    margin-top:8px;
+    line-height:1.5;
+  }
+  canvas{ max-height:280px; }
+
+  table{ width:100%; border-collapse:collapse; font-size:13px; }
+  th{
+    text-align:left;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    color:var(--ink-soft);
+    border-bottom:1px solid var(--line);
+    padding:6px 8px;
+  }
+  td{
+    padding:6px 8px;
+    border-bottom:1px solid #EEEBE1;
+  }
+  tr:hover td{ background:#FAF8F2; }
+  .pill{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    padding:2px 7px;
+    border-radius:3px;
+    background:var(--teal-soft);
+    color:var(--teal);
+  }
+  .pill.warn{ background:var(--amber-soft); color:var(--amber); }
+  .pill.danger{ background:var(--red-soft); color:var(--red); }
+
+  .model-card{
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:20px;
+  }
+  .model-card h3{ font-family:'Space Grotesk',sans-serif; font-size:16px; margin:0 0 4px; }
+  .model-card .desc{ font-size:12.5px; color:var(--ink-soft); margin-bottom:14px; }
+  .metric-row{ display:flex; gap:22px; flex-wrap:wrap; }
+  .metric{ text-align:left; }
+  .metric .num{ font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:600; color:var(--teal); }
+  .metric .lab{ font-size:10.5px; text-transform:uppercase; color:var(--ink-soft); letter-spacing:0.5px; }
+
+  .cluster-chip{
+    display:inline-flex; flex-direction:column; gap:2px;
+    background:#FAF8F2; border:1px solid var(--line); border-radius:5px;
+    padding:10px 12px; margin:0 8px 8px 0;
+  }
+  .cluster-chip .n{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--teal); font-weight:600;}
+  .cluster-chip .k{ font-size:11.5px; color:var(--ink-soft); }
+
+  .warning-box{
+    margin-top:40px;
+    border:2px solid var(--amber);
+    background:var(--amber-soft);
+    border-radius:6px;
+    padding:16px 20px;
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+  }
+  .warning-box .icon{ font-size:20px; }
+  .warning-box b{ font-family:'Space Grotesk', sans-serif; }
+  .warning-box p{ margin:4px 0 0; font-size:13px; color:#6b3a05; line-height:1.5; }
+
+  footer{
+    max-width:1200px; margin:26px auto 0; padding:0 24px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; color:var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<div class="label-header">
+  <div class="rx-mark">℞ Analytics Label · Batch: Major-Project-2026</div>
+  <h1>Drug, Side Effects &amp; Medical Condition Analytics</h1>
+  <div class="subhead">An evidence-based dashboard summarizing patterns across 2,900+ drugs, 47 medical conditions, and 230 drug classes — derived from the cleaned drugs.com dataset.</div>
+  <div class="meta-strip" id="metaStrip"></div>
+</div>
+
+<div class="container">
+
+  <div class="kpi-row" id="kpiRow"></div>
+
+  <!-- CONDITIONS & CLASSES -->
+  <div class="section-title"><span class="tag">01</span> Conditions &amp; Drug Classes</div>
+  <div class="grid-2">
+    <div class="card"><h3>Top 10 Medical Conditions by Drug Count</h3><canvas id="chartConditions"></canvas></div>
+    <div class="card"><h3>Top 10 Drug Classes by Drug Count</h3><canvas id="chartClasses"></canvas></div>
+  </div>
+
+  <!-- RATINGS -->
+  <div class="section-title"><span class="tag">02</span> Ratings &amp; Efficacy Perception</div>
+  <div class="grid-2">
+    <div class="card"><h3>Rating Band Breakdown</h3><canvas id="chartRatingBand"></canvas></div>
+    <div class="card">
+      <h3>Best vs. Worst-Rated Conditions (avg. rating, min. 5 drugs)</h3>
+      <canvas id="chartConditionRating"></canvas>
+      <div class="cap">Correlation between side-effect count and rating: <b>r = <span id="corrVal"></span></b> — reporting more side effects does not meaningfully predict a worse rating.</div>
+    </div>
+  </div>
+
+  <!-- SIDE EFFECTS -->
+  <div class="section-title"><span class="tag">03</span> Side-Effect Patterns (NLP)</div>
+  <div class="grid-2">
+    <div class="card"><h3>Top 15 Most Frequently Reported Side Effects</h3><canvas id="chartSideEffects"></canvas></div>
+    <div class="card">
+      <h3>Side-Effect Profile Clusters (TF-IDF + KMeans, k=6)</h3>
+      <div id="clusterChips"></div>
+      <div class="cap">Each cluster groups drugs describing a similar <i>type</i> of adverse reaction, regardless of what condition they treat.</div>
+    </div>
+  </div>
+
+  <!-- SAFETY FLAGS -->
+  <div class="section-title"><span class="tag">04</span> Safety &amp; Regulatory Flags</div>
+  <div class="grid-3">
+    <div class="card"><h3>Rx vs OTC</h3><canvas id="chartRxOtc"></canvas></div>
+    <div class="card"><h3>Pregnancy Risk Category</h3><canvas id="chartPregnancy"></canvas></div>
+    <div class="card">
+      <h3>Alcohol Interaction Warning</h3>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:38px; color:var(--red); font-weight:600;" id="alcoholPct"></div>
+      <div class="cap">of all drugs in the dataset carry an explicit alcohol-interaction warning flag.</div>
+    </div>
+  </div>
+
+  <!-- TABLES -->
+  <div class="section-title"><span class="tag">05</span> Notable Drugs</div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Top-Rated Drugs (≥20 reviews)</h3>
+      <table><thead><tr><th>Drug</th><th>Condition</th><th>Rating</th><th>Reviews</th></tr></thead>
+      <tbody id="topRatedBody"></tbody></table>
+    </div>
+    <div class="card">
+      <h3>Lowest-Rated Drugs (≥20 reviews)</h3>
+      <table><thead><tr><th>Drug</th><th>Condition</th><th>Rating</th><th>Reviews</th></tr></thead>
+      <tbody id="lowRatedBody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ML -->
+  <div class="section-title"><span class="tag">06</span> Machine Learning Models</div>
+  <div class="grid-2">
+    <div class="model-card">
+      <h3>Rating-Band Classifier</h3>
+      <div class="desc">Random Forest · predicts Poor/Average/Good/Excellent from a drug's clinical profile (condition, class, Rx/OTC, pregnancy category, side-effect count, brand count, reviews).</div>
+      <div class="metric-row" id="mlRating"></div>
+    </div>
+    <div class="model-card">
+      <h3>Drug-Class-from-Text Classifier</h3>
+      <div class="desc">TF-IDF + Logistic Regression · predicts a drug's pharmacological class purely from its side-effect description text (47 classes).</div>
+      <div class="metric-row" id="mlText"></div>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <div class="icon">⚠️</div>
+    <div>
+      <b>Not medical advice.</b>
+      <p>This dashboard is an academic analytics project built on a public dataset (drugs.com via Kaggle). Ratings, side-effect frequencies, and model predictions reflect patterns in self-reported/aggregated data and should never be used to make real medication decisions. Always consult a licensed physician or pharmacist.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Generated from drugs_side_effects_drugs_com.csv (cleaned, n=2,931 records) · Built with Python (pandas, scikit-learn) + Chart.js · Major Project 2026
+</footer>
+
+<script>
+const DATA = {"insights": {"overview": {"total_drugs": 2912, "total_records": 2931, "total_conditions": 47, "total_drug_classes": 230, "avg_rating": 6.83, "avg_reviews": 75.4, "pct_prescription": 88.7}, "top_conditions": {"Pain": 264, "Colds & Flu": 245, "Acne": 238, "Hypertension": 177, "Osteoarthritis": 129, "Hayfever": 124, "Eczema": 122, "AIDS/HIV": 109, "Diabetes (Type 2)": 104, "Psoriasis": 93}, "top_drug_classes": {"Upper respiratory combinations": 245, "Topical acne agents": 125, "Topical steroids": 94, "Unclassified": 83, "Nonsteroidal anti-inflammatory drugs": 72, "Antihistamines": 61, "Miscellaneous topical agents": 56, "Topical rubefacient": 56, "Topical anesthetics": 54, "Laxatives": 53}, "rx_otc_breakdown": {"Rx": 1997, "Rx/OTC": 604, "OTC": 328, "Unknown": 2}, "pregnancy_category_breakdown": {"C": 1382, "B": 508, "N": 436, "Unknown": 230, "D": 228, "X": 129, "A": 18}, "rating_band_breakdown": {"No rating": 1361, "Excellent (8-10)": 570, "Good (6-8)": 514, "Average (3-6)": 382, "Poor (0-3)": 104}, "top_side_effects": {"lips": 2273, "tongue": 2129, "hives": 1940, "swelling of your face": 1713, "difficult breathing": 1257, "nausea": 1183, "vomiting": 1182, "itching": 1142, "dizziness": 807, "diarrhea": 806, "confusion": 705, "constipation": 693, "fever": 636, "headache": 623, "loss of appetite": 605}, "top_rated_drugs": [{"drug_name": "demerol", "medical_condition": "Pain", "rating": 9.6, "no_of_reviews": 70}, {"drug_name": "opium", "medical_condition": "Diarrhea", "rating": 9.6, "no_of_reviews": 28}, {"drug_name": "stribild", "medical_condition": "AIDS/HIV", "rating": 9.5, "no_of_reviews": 89}, {"drug_name": "cobicistat / elvitegravir / emtricitabine / tenofovir", "medical_condition": "AIDS/HIV", "rating": 9.5, "no_of_reviews": 89}, {"drug_name": "meperidine", "medical_condition": "Pain", "rating": 9.5, "no_of_reviews": 93}, {"drug_name": "desoxyn", "medical_condition": "ADHD", "rating": 9.4, "no_of_reviews": 35}, {"drug_name": "nefazodone", "medical_condition": "Anxiety", "rating": 9.3, "no_of_reviews": 39}, {"drug_name": "aciphex", "medical_condition": "GERD (Heartburn)", "rating": 9.3, "no_of_reviews": 36}, {"drug_name": "tramadol", "medical_condition": "Anxiety", "rating": 9.3, "no_of_reviews": 106}, {"drug_name": "ephedrine / guaifenesin", "medical_condition": "Colds & Flu", "rating": 9.2, "no_of_reviews": 21}], "lowest_rated_drugs": [{"drug_name": "euthyrox", "medical_condition": "Hypothyroidism", "rating": 1.1, "no_of_reviews": 92}, {"drug_name": "basaglar", "medical_condition": "Diabetes (Type 1)", "rating": 1.8, "no_of_reviews": 58}, {"drug_name": "prochlorperazine", "medical_condition": "Anxiety", "rating": 2.1, "no_of_reviews": 84}, {"drug_name": "fosamax", "medical_condition": "Osteoporosis", "rating": 2.4, "no_of_reviews": 55}, {"drug_name": "alendronate", "medical_condition": "Osteoporosis", "rating": 2.5, "no_of_reviews": 106}, {"drug_name": "hydralazine", "medical_condition": "Hypertension", "rating": 2.7, "no_of_reviews": 77}, {"drug_name": "prolia", "medical_condition": "Osteoporosis", "rating": 2.7, "no_of_reviews": 332}, {"drug_name": "denosumab", "medical_condition": "Osteoporosis", "rating": 2.7, "no_of_reviews": 337}, {"drug_name": "umeclidinium", "medical_condition": "COPD", "rating": 2.8, "no_of_reviews": 21}, {"drug_name": "risedronate", "medical_condition": "Osteoporosis", "rating": 2.9, "no_of_reviews": 56}], "most_side_effects_drugs": [{"drug_name": "zopiclone", "medical_condition": "Insomnia", "side_effect_count": 444}, {"drug_name": "salbutamol", "medical_condition": "Asthma", "side_effect_count": 441}, {"drug_name": "bamlanivimab and etesevimab", "medical_condition": "Covid 19", "side_effect_count": 433}, {"drug_name": "coal tar/salicylic acid", "medical_condition": "Psoriasis", "side_effect_count": 418}, {"drug_name": "tzield", "medical_condition": "Diabetes (Type 1)", "side_effect_count": 402}, {"drug_name": "infliximab", "medical_condition": "IBD (Bowel)", "side_effect_count": 337}, {"drug_name": "alemtuzumab", "medical_condition": "Rheumatoid Arthritis", "side_effect_count": 139}, {"drug_name": "avelox i.v.", "medical_condition": "Bronchitis", "side_effect_count": 103}, {"drug_name": "anaprox", "medical_condition": "Osteoarthritis", "side_effect_count": 91}, {"drug_name": "anaprox-ds", "medical_condition": "Osteoarthritis", "side_effect_count": 91}], "best_treated_conditions": [{"medical_condition": "Swine Flu", "avg_rating": 8.65, "drug_count": 5}, {"medical_condition": "Gout", "avg_rating": 8.525, "drug_count": 9}, {"medical_condition": "Eczema", "avg_rating": 8.269444444444444, "drug_count": 121}, {"medical_condition": "Pneumonia", "avg_rating": 8.027272727272727, "drug_count": 72}, {"medical_condition": "Stroke", "avg_rating": 7.866666666666667, "drug_count": 5}, {"medical_condition": "Angina", "avg_rating": 7.830000000000001, "drug_count": 71}, {"medical_condition": "Anxiety", "avg_rating": 7.795454545454547, "drug_count": 45}, {"medical_condition": "Migraine", "avg_rating": 7.694117647058823, "drug_count": 61}, {"medical_condition": "Herpes", "avg_rating": 7.69, "drug_count": 9}, {"medical_condition": "Weight Loss", "avg_rating": 7.566666666666666, "drug_count": 23}], "worst_treated_conditions": [{"medical_condition": "Hypertension", "avg_rating": 5.983333333333334, "drug_count": 177}, {"medical_condition": "Cholesterol", "avg_rating": 5.866666666666666, "drug_count": 45}, {"medical_condition": "Diabetes (Type 2)", "avg_rating": 5.733720930232559, "drug_count": 104}, {"medical_condition": "Incontinence", "avg_rating": 5.7, "drug_count": 19}, {"medical_condition": "Hypothyroidism", "avg_rating": 5.5249999999999995, "drug_count": 17}, {"medical_condition": "Cancer", "avg_rating": 5.5, "drug_count": 20}, {"medical_condition": "Bronchitis", "avg_rating": 5.488235294117647, "drug_count": 71}, {"medical_condition": "Hair Loss", "avg_rating": 5.283333333333333, "drug_count": 11}, {"medical_condition": "Allergies", "avg_rating": 5.233333333333333, "drug_count": 14}, {"medical_condition": "Osteoporosis", "avg_rating": 4.925, "drug_count": 56}], "correlation_sideeffects_rating": 0.046, "alcohol_interaction_pct": 47.0}, "clusters": {"0": {"keywords": ["very bad", "bad", "very", "sometimes", "blistered peeling", "swollen blistered"], "size": 265}, "1": {"keywords": ["medicine", "breathing swelling", "stop", "breathing", "hives difficult", "throat"], "size": 602}, "2": {"keywords": ["feeling", "pain", "like might", "might pass", "might", "pass out"], "size": 624}, "3": {"keywords": ["about", "skin", "they", "fda", "need attention", "need"], "size": 340}, "4": {"keywords": ["pain", "skin", "problems", "feeling", "stomach", "stomach pain"], "size": 772}, "5": {"keywords": ["skin", "treated skin", "irritation", "treated", "stinging", "redness"], "size": 204}}, "ml": {"rating_band_model": {"accuracy": 0.567, "macro_precision": 0.538, "macro_recall": 0.558, "macro_f1": 0.542, "top_features": {"no_of_reviews": 0.291, "primary_drug_class": 0.248, "medical_condition": 0.15, "side_effect_count": 0.106, "pregnancy_category": 0.07, "brand_count": 0.061, "rx_otc": 0.036, "csa": 0.021}, "n_train": 1256, "n_test": 314, "classes": ["Average (3-6)", "Excellent (8-10)", "Good (6-8)", "Poor (0-3)"]}, "drug_class_text_model": {"accuracy": 0.812, "macro_precision": 0.832, "macro_recall": 0.843, "macro_f1": 0.82, "n_classes": 47, "n_train": 1469, "n_test": 368}}};
+
+const ink = "#1C2B33", teal="#0F766E", amber="#B45309", red="#9F1D35", blue="#3B5B8C", inkSoft="#5B6B73";
+const palette = ["#0F766E","#3B5B8C","#B45309","#9F1D35","#6B7280","#0E7490","#A16207","#7C3AED","#059669","#DC2626"];
+
+Chart.defaults.font.family = "IBM Plex Sans, sans-serif";
+Chart.defaults.color = inkSoft;
+Chart.defaults.font.size = 11;
+
+// --- meta strip ---
+const meta = document.getElementById('metaStrip');
+meta.innerHTML = `
+  <span>Records: <b>${DATA.insights.overview.total_records.toLocaleString()}</b></span>
+  <span>Unique drugs: <b>${DATA.insights.overview.total_drugs.toLocaleString()}</b></span>
+  <span>Conditions: <b>${DATA.insights.overview.total_conditions}</b></span>
+  <span>Drug classes: <b>${DATA.insights.overview.total_drug_classes}</b></span>
+`;
+
+// --- KPI row ---
+const kpis = [
+  {v: DATA.insights.overview.avg_rating, l: "Avg. Rating (/10)"},
+  {v: DATA.insights.overview.avg_reviews, l: "Avg. Reviews / Drug"},
+  {v: DATA.insights.overview.pct_prescription + "%", l: "Prescription-Only"},
+  {v: DATA.insights.alcohol_interaction_pct + "%", l: "Alcohol Warning Flag"},
+  {v: DATA.insights.overview.total_conditions, l: "Medical Conditions"},
+];
+document.getElementById('kpiRow').innerHTML = kpis.map(k =>
+  `<div class="kpi"><div class="val">${k.v}</div><div class="lbl">${k.l}</div></div>`
+).join('');
+
+// --- helper to build horizontal bar chart ---
+function hbar(id, labelsObj, color){
+  const labels = Object.keys(labelsObj);
+  const values = Object.values(labelsObj);
+  new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: { labels, datasets: [{ data: values, backgroundColor: color, borderRadius:3, barThickness:14 }] },
+    options: {
+      indexAxis: 'y',
+      plugins: { legend: { display:false } },
+      scales: { x: { grid:{color:'#EEEBE1'} }, y: { grid:{display:false} } },
+      responsive:true, maintainAspectRatio:true,
+    }
+  });
+}
+
+hbar('chartConditions', DATA.insights.top_conditions, teal);
+hbar('chartClasses', DATA.insights.top_drug_classes, blue);
+hbar('chartSideEffects', DATA.insights.top_side_effects, red);
+
+// rating band donut
+new Chart(document.getElementById('chartRatingBand'), {
+  type: 'doughnut',
+  data: {
+    labels: Object.keys(DATA.insights.rating_band_breakdown),
+    datasets: [{ data: Object.values(DATA.insights.rating_band_breakdown), backgroundColor: palette }]
+  },
+  options: { plugins:{ legend:{ position:'bottom', labels:{boxWidth:10,font:{size:10.5}} } } }
+});
+
+// condition rating: combine best + worst
+const best = DATA.insights.best_treated_conditions.slice(0,6);
+const worst = DATA.insights.worst_treated_conditions.slice(-6);
+const condLabels = [...best.map(d=>d.medical_condition), ...worst.map(d=>d.medical_condition)];
+const condValues = [...best.map(d=>d.avg_rating), ...worst.map(d=>d.avg_rating)];
+const condColors = [...best.map(()=>teal), ...worst.map(()=>red)];
+new Chart(document.getElementById('chartConditionRating'), {
+  type: 'bar',
+  data: { labels: condLabels, datasets: [{ data: condValues, backgroundColor: condColors, borderRadius:3 }] },
+  options: {
+    indexAxis:'y',
+    plugins:{ legend:{display:false} },
+    scales:{ x:{ min:0, max:10, grid:{color:'#EEEBE1'} }, y:{ grid:{display:false} } }
+  }
+});
+document.getElementById('corrVal').textContent = DATA.insights.correlation_sideeffects_rating;
+
+// clusters
+document.getElementById('clusterChips').innerHTML = Object.entries(DATA.clusters).map(([id,info]) =>
+  `<div class="cluster-chip"><span class="n">Cluster ${id} · n=${info.size}</span><span class="k">${info.keywords.slice(0,4).join(', ')}</span></div>`
+).join('');
+
+// rx/otc + pregnancy pies
+new Chart(document.getElementById('chartRxOtc'), {
+  type:'pie',
+  data:{ labels:Object.keys(DATA.insights.rx_otc_breakdown), datasets:[{data:Object.values(DATA.insights.rx_otc_breakdown), backgroundColor:palette}] },
+  options:{ plugins:{legend:{position:'bottom', labels:{boxWidth:10,font:{size:10}}}} }
+});
+new Chart(document.getElementById('chartPregnancy'), {
+  type:'pie',
+  data:{ labels:Object.keys(DATA.insights.pregnancy_category_breakdown), datasets:[{data:Object.values(DATA.insights.pregnancy_category_breakdown), backgroundColor:palette}] },
+  options:{ plugins:{legend:{position:'bottom', labels:{boxWidth:10,font:{size:10}}}} }
+});
+document.getElementById('alcoholPct').textContent = DATA.insights.alcohol_interaction_pct + "%";
+
+// tables
+function fillTable(id, rows){
+  document.getElementById(id).innerHTML = rows.map(r =>
+    `<tr><td>${r.drug_name}</td><td>${r.medical_condition}</td><td><span class="pill">${r.rating}</span></td><td>${r.no_of_reviews}</td></tr>`
+  ).join('');
+}
+fillTable('topRatedBody', DATA.insights.top_rated_drugs.slice(0,8));
+fillTable('lowRatedBody', DATA.insights.lowest_rated_drugs.slice(0,8));
+
+// ML metrics
+function fillMetrics(id, m, keys){
+  document.getElementById(id).innerHTML = keys.map(([k,label]) =>
+    `<div class="metric"><div class="num">${m[k]}</div><div class="lab">${label}</div></div>`
+  ).join('');
+}
+fillMetrics('mlRating', DATA.ml.rating_band_model, [['accuracy','Accuracy'],['macro_f1','Macro F1'],['n_train','Train n'],['n_test','Test n']]);
+fillMetrics('mlText', DATA.ml.drug_class_text_model, [['accuracy','Accuracy'],['macro_f1','Macro F1'],['n_classes','Classes'],['n_test','Test n']]);
+</script>
+</body>
+</html>
