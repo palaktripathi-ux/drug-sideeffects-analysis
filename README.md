@@ -5,20 +5,6 @@ Medical Condition Dataset" (2,931 cleaned drug records, 47 medical conditions, 2
 classes). Extends the original EDA + Streamlit deployment with NLP, machine learning,
 and a content-based recommender system.
 
-## What's included
-
-| Component | Location | Description |
-|---|---|---|
-| Data cleaning | `src/clean_data.py` | Detects/removes corrupted rows, splits multi-valued fields, engineers new features |
-| EDA & insights | `src/eda_insights.py` | Computes all summary stats, saves charts + `insights.json` |
-| NLP clustering | `src/nlp_clustering.py` | TF-IDF + KMeans on side-effect text → 6 side-effect profile clusters |
-| ML models | `src/ml_models.py` | Rating-band classifier (Random Forest) + drug-class-from-text classifier (Logistic Regression) |
-| Recommender | `src/recommender.py` | Content-based "similar drugs" system, cosine similarity |
-| Streamlit app | `app/` | 6-page interactive web app |
-| Dashboard | `dashboard/dashboard.html` | Standalone, self-contained analytics dashboard (open directly in any browser, no server needed) |
-| Report | `report/Project_Report.docx` | Full written report: methodology, results, limitations, future work |
-
-
 ## Key results at a glance
 
 - **2,912 unique drugs** across **47 medical conditions** and **230 drug classes**
